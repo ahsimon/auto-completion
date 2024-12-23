@@ -669,7 +669,7 @@ export class CompletionProvider
   private provideInlineCompletion(): InlineCompletionItem[] {
     const editor = window.activeTextEditor;
 
-    if (!editor || !this._position) return [];
+    if (!editor || !this._position) {return [];}
 
     const formattedCompletion = new CompletionFormatter(editor).format(
       this.removeStopWords(this._completion)

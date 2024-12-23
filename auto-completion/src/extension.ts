@@ -15,16 +15,16 @@ import { CompletionProvider } from "./completion";
 import { FileInteractionCache } from "./file-interaction";
 import { TemplateProvider } from "./template-provider";
 
-
-
-
 import path from "path";
 import { getLineBreakCount } from "./new-utils";
-
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  console.log(
+    'Congratulations, your extension "vscode-terminal-reader" is now active!'
+  );
+
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right);
   const fileInteractionCache = new FileInteractionCache();
 
@@ -37,12 +37,13 @@ export function activate(context: vscode.ExtensionContext) {
     context
   );
 
-  context.subscriptions.push(
+  context.subscriptions.push
+  (
     languages.registerInlineCompletionItemProvider(
       { pattern: "**" },
       completionProvider
-    )
-  ),
+    ),
+  
     workspace.onDidChangeTextDocument((e) => {
       const changes = e.contentChanges[0];
       if (!changes) {
@@ -61,7 +62,16 @@ export function activate(context: vscode.ExtensionContext) {
       const currentLine = changes.range.start.line;
       const currentCharacter = changes.range.start.character;
       fileInteractionCache.incrementStrokes(currentLine, currentCharacter);
-    });
+    }),
+
+     commands.registerCommand('auto-complete.helloWorld',async () => {
+      // The code you place here will be executed every time your command is executed
+      // Display a message box to the user
+      vscode.window.showInformationMessage('Hello World from auto-complete!');
+        
+    })
+
+  );
 }
 
 // This method is called when your extension is deactivated
