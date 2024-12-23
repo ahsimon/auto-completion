@@ -14,7 +14,7 @@ import {
 import { CompletionProvider } from "./completion";
 import { FileInteractionCache } from "./file-interaction";
 import { TemplateProvider } from "./template-provider";
-
+import { setContext } from "./context";
 import path from "path";
 import { getLineBreakCount } from "./new-utils";
 
@@ -24,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(
     'Congratulations, your extension "vscode-terminal-reader" is now active!'
   );
+
+
+  setContext(context);
+  const config = workspace.getConfiguration("twinny");
 
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right);
   const fileInteractionCache = new FileInteractionCache();
