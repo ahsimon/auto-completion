@@ -1,25 +1,67 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import * as os from "os";
+import {
+  commands,
+  ExtensionContext,
+  languages,
+  StatusBarAlignment,
+  window,
+  workspace,
+} from "vscode";
+
+import { CompletionProvider } from "./completion";
+import { FileInteractionCache } from "./file-interaction";
+import { TemplateProvider } from "./template-provider";
+
+
+
+
+import path from "path";
+import { getLineBreakCount } from "./new-utils";
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right);
+  const fileInteractionCache = new FileInteractionCache();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "auto-completion" is now active!');
+  const templateDir = path.join(os.homedir(), ".twinny/templates") as string;
+  const templateProvider = new TemplateProvider(templateDir);
+  const completionProvider = new CompletionProvider(
+    statusBarItem,
+    fileInteractionCache,
+    templateProvider,
+    context
+  );
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('auto-completion.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from auto-completion!');
-	});
-
-	context.subscriptions.push(disposable);
+  context.subscriptions.push(
+    languages.registerInlineCompletionItemProvider(
+      { pattern: "**" },
+      completionProvider
+    )
+  ),
+    workspace.onDidChangeTextDocument((e) => {
+      const changes = e.contentChanges[0];
+      if (!changes) {
+        return;
+      }
+      const lastCompletion = completionProvider.lastCompletionText;
+      const isLastCompltionMultiline = getLineBreakCount(lastCompletion) > 1;
+      completionProvider.setAcceptedLastCompletion(
+        !!(
+          changes.text &&
+          lastCompletion &&
+          changes.text === lastCompletion &&
+          isLastCompltionMultiline
+        )
+      );
+      const currentLine = changes.range.start.line;
+      const currentCharacter = changes.range.start.character;
+      fileInteractionCache.incrementStrokes(currentLine, currentCharacter);
+    });
 }
 
 // This method is called when your extension is deactivated
