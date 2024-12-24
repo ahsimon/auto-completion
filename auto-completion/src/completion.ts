@@ -154,7 +154,10 @@ export class CompletionProvider
       return;
     }
 
+    console.log("languageEnabled--->",languageEnabled);
     const cachedCompletion = cache.getCache(this._prefixSuffix);
+    console.log("cachedCompletion--->",cachedCompletion);
+    console.log("this.config.completionCacheEnabled--->",this.config.completionCacheEnabled);
     if (cachedCompletion && this.config.completionCacheEnabled) {
       this._completion = cachedCompletion;
       return this.provideInlineCompletion();
@@ -167,6 +170,8 @@ export class CompletionProvider
       this._completion = this.lastCompletionText;
       return this.provideInlineCompletion();
     }
+
+    console.log(" this.config.autoSuggestEnabled--->", this.config.autoSuggestEnabled);
 
     if (
       !this.config.enabled ||
