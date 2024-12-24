@@ -1,4 +1,4 @@
-import * as lancedb from "@lancedb/lancedb";
+/*import * as lancedb from "@lancedb/lancedb";
 import * as arrow from "apache-arrow";
 import fs from "fs";
 import ignore from "ignore";
@@ -253,4 +253,4 @@ export class EmbeddingDatabase extends Base {
 
     return (response as Embedding).embeddings[0];
   }
-}
+}*/

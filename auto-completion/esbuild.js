@@ -14,7 +14,7 @@ const copyWasmPlugin = {
             try {
 		
                 fs.cpSync('./node_modules/web-tree-sitter/tree-sitter.wasm', './dist/tree-sitter.wasm');
-				fs.cpSync('./node_modules/tree-sitter-wasm-prebuilt/lib/', './dist/tree-sitter-wasms/',{recursive:true });
+				fs.cpSync('./node_modules/tree-sitter-wasms/out/', './dist/tree-sitter-wasms/',{recursive:true });
             } catch (e) {
                 console.error('Failed to copy file:', e);
             }
