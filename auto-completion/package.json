@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "auto-complete.helloWorld",
+        "command": "auto-complete.on",
         "title": "Hello World"
       }
     ],

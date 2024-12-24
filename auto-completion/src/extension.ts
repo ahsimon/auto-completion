@@ -68,10 +68,10 @@ export function activate(context: vscode.ExtensionContext) {
       fileInteractionCache.incrementStrokes(currentLine, currentCharacter);
     }),
 
-     commands.registerCommand('auto-complete.helloWorld',async () => {
+     commands.registerCommand('auto-complete.on',async () => {
       // The code you place here will be executed every time your command is executed
       // Display a message box to the user
-      vscode.window.showInformationMessage('Hello World from auto-complete!');
+      vscode.window.showInformationMessage('auto-completion enabled!');
         
     })
 
