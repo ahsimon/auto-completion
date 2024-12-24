@@ -8,10 +8,13 @@ const watch = process.argv.includes('--watch');
  */
 const copyWasmPlugin = {
     name: 'copy-wasm-plugin',
+	
     setup(build) {
         build.onEnd(async () => {
             try {
+		
                 fs.cpSync('./node_modules/web-tree-sitter/tree-sitter.wasm', './dist/tree-sitter.wasm');
+				fs.cpSync('./node_modules/tree-sitter-wasm-prebuilt/lib/', './dist/tree-sitter-wasm/',{recursive:true });
             } catch (e) {
                 console.error('Failed to copy file:', e);
             }
